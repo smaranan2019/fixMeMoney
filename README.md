@@ -25,6 +25,8 @@
     - salary 
     - other   
 
+# Reference 
+- UI by [morion4000](https://github.com/morion4000/personal-finance)
 
 # Other info 
 ## Submission requirements: 
@@ -42,3 +44,4 @@
     - Includes the extent to which the app can help businesses grow.
 - Potential Community Impact
     - Includes how impactful the app will be as a driver for positive change within the community.
+
