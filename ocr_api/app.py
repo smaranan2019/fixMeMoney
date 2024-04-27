@@ -4,6 +4,12 @@ from dotenv import load_dotenv
 import os
 import requests
 import google.generativeai as genai
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+cred = credentials.Certificate("./firebase/gemini-fixmemoney-firebase-adminsdk-s5ncw-bc46093f91.json")
+db_app = firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 load_dotenv()
 
@@ -68,6 +74,7 @@ def convertImageToText():
                 # for each page, using Gemini, convert OCR text to table data
                 gemini_response = model.generate_content(gemini_prompt + "\n\n" + result)
                 gemini_response_text += gemini_response.text + "\n\n-next page-\n\n"
+                # process table data and save to temp_db
         return gemini_response_text
 
     return "Wrong file format", 415
@@ -77,6 +84,17 @@ def convertImageToText():
 # save into temp_db pending user edits and confirmation
 # when save and fetch data, got userid
 
+@app.route("/transactions", methods=['GET'])
+def getTransactions():
+    transactions = []
+    transactions_ref = db.collection("transactions").stream()
+
+    for transaction in transactions_ref:
+        if transaction.exists:
+            transaction_data = transaction.to_dict()
+            transaction_data['id'] = transaction.id  # Include the document ID in the data
+            transactions.append(transaction_data)
+    return transactions
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=port, debug=True)
