@@ -7,6 +7,7 @@ import RentBuy from './pages/RentBuy';
 import About from './pages/About';
 import Notfound from './pages/NotFound';
 import Test from './pages/Test'
+import Upload from './pages/Upload';
 
 import './css/App.css';
 
@@ -31,6 +32,9 @@ class App extends Component {
               </Route>
               <Route path="/test">
                 <Test />
+              <Route path="/upload">
+                <Menu />
+                <Upload />
               </Route>
               <Route>
                 <Notfound />

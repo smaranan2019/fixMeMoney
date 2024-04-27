@@ -9,6 +9,7 @@ const CONFIG = {
     INCOME: 'income',
     EXPENSE: 'expense',
   },
+  ocr_api : "http://localhost:5200/ocr",
   SAMPLE_DATA: {
     ASSETS: [
       {
