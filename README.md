@@ -1,13 +1,39 @@
 # fixMeMoney
-Gemini Hackathon Submission
+> Gemini Hackathon Submission
 
-Submit: 
+# TODO:
+- send image to gemini it returns 
+    - categories
+    - amount  
+- store info in firebase 
+- UI to retreive the info
+    - dashboard 
+
+# Categories: 
+> may change depending on the returns of Gemini
+- spending 
+    - food 
+    - travel 
+    - apparel 
+    - transport 
+    - bills 
+    - medical expenses 
+    - subscriptions 
+    - tax
+    - others 
+- income 
+    - salary 
+    - other   
+
+
+# Other info 
+## Submission requirements: 
 - URL of repo 
 - video to demo submission - on youtube public 
 - gogle cloud project id 
 - which gemini using -0 google ai or vetex ai 
 
-Judging Criteria
+## Judging Criteria
 - Quality of the Idea
     - Includes creativity and originality of the idea.
 - Implementation of the Idea
