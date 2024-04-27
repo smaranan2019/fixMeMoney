@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 import base64
@@ -7,6 +8,7 @@ import requests
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 port = 5200
 
 api_key=os.getenv("API_KEY")
@@ -27,13 +29,13 @@ def allowed_file(filename):
 @app.route("/ocr", methods=['POST'])
 def convertImageToText():
     if 'file' not in request.files:
-        return "no file provided"
+        return "no file provided", 400
 
     file = request.files['file']
     # if user does not select file, browser also
     # submit an empty part without filename
     if file.filename == '':
-        return "no file provided"
+        return "no file provided", 400
 
     if file and allowed_file(file.filename): # allow only pdf
 
@@ -55,7 +57,7 @@ def convertImageToText():
                 result += "\n\n-next page-\n\n"
         return result
 
-    return "No ocr data returned"
+    return "Wrong file format", 415
 
 
 if __name__ == '__main__':
