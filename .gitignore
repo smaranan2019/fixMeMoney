@@ -329,3 +329,4 @@ cypress/  # If using Cypress
 
 # Draft files (optional)
 *.draft
+.DS_Store

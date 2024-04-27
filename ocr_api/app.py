@@ -1,11 +1,14 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
-import base64
 import requests
+import google.generativeai as genai
 
 load_dotenv()
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+model = genai.GenerativeModel('gemini-pro')
 
 app = Flask(__name__)
 CORS(app)
@@ -19,6 +22,12 @@ ocr_url = 'https://api.ocr.space/parse/image'
 
 pdf_api_key=os.getenv("PDF_API_KEY")
 pdf_2_jpg_url = 'https://v2.convertapi.com/convert/pdf/to/jpg?Secret=' + pdf_api_key + '&StoreFile=true'
+
+gemini_prompt =  """Given:
+- The columns are 'Trans' (date), 'Description of Transaction' (string), 'Transaction Amount' (decimal).
+- Exclude 'Post' column and its values.
+- Ignore 'Ref No.' only.
+Convert the following text into table data:"""
 
 ALLOWED_EXTENSIONS = {'pdf'}
 
@@ -45,6 +54,7 @@ def convertImageToText():
         jpg_data = jpg_response.json()
         # End of converting PDF to JPG
         result = ""
+        gemini_response_text = ""
         for jpg in jpg_data['Files']:
             body = {
                 "url" : jpg["Url"],
@@ -53,11 +63,19 @@ def convertImageToText():
             ocr_text = requests.post(ocr_url, data=body)
             ocr_response = ocr_text.json()
             for ocr in ocr_response['ParsedResults']:
-                result += ocr['ParsedText']
+                result += ocr['ParsedText'] # str
                 result += "\n\n-next page-\n\n"
-        return result
+                # for each page, using Gemini, convert OCR text to table data
+                gemini_response = model.generate_content(gemini_prompt + "\n\n" + result)
+                gemini_response_text += gemini_response.text + "\n\n-next page-\n\n"
+        return gemini_response_text
 
     return "Wrong file format", 415
+
+# convert OCR text to table using Gemini
+# for each row, generate category using Gemini
+# save into temp_db pending user edits and confirmation
+# when save and fetch data, got userid
 
 
 if __name__ == '__main__':
