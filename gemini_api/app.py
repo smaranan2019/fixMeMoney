@@ -15,7 +15,7 @@ model = genai.GenerativeModel('gemini-pro')
 def hello_world():
     return "<p>Hello, World!</p>"
 
-@app.route("/gemini")
+@app.route("/gemini", methods=['POST'])
 def generateText():
     response = "Not available";
     data = request.json
