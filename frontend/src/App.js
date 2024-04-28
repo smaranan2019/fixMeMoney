@@ -32,6 +32,7 @@ class App extends Component {
               </Route>
               <Route path="/test">
                 <Test />
+              </Route>
               <Route path="/upload">
                 <Menu />
                 <Upload />

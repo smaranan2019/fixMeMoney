@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import firebase from '../firebase';
 import { collection, getDocs, getFirestore } from "firebase/firestore"; 
 
+const db = getFirestore(firebase);  
 
 const Test = () => {
 
@@ -9,10 +10,7 @@ const Test = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const db = getFirestore(firebase);  
-  
     useEffect(() => {
-
       const fetchData = async () => {
         setIsLoading(true);
         setError(null);
@@ -20,10 +18,13 @@ const Test = () => {
         try {
             const collectionRef = collection(db, "bank_statement");
             const querySnapshot = await getDocs(collectionRef);
-            console.log("querySnapshot data",querySnapshot)
-            const usersData = querySnapshot.docs.map(doc => doc.data());
+            const userDataOuter = querySnapshot.docs.map(doc => doc.data());
+            const usersData = userDataOuter[0];
+            console.log("data in usersData: ",usersData)
             setData(usersData)
+            console.log("data in data: ",data)
 
+            // console.log("current data is: ",data)
         } catch (error) {
             console.error('Error fetching data:', error);
             setError(error);
@@ -66,8 +67,8 @@ const Test = () => {
                         {data.map((item, index) => (
                             <tr key={index}>
                             {/* Access and display data from each item in the data array */}
-                            <td>{item.field1}</td>
-                            <td>{item.field2}</td>
+                            <td>{item.key}</td>
+                            <td>{item.value}</td>
                             {/* Add more table cells for other fields */}
                             </tr>
                         ))}
