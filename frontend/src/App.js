@@ -8,6 +8,7 @@ import About from './pages/About';
 import Notfound from './pages/NotFound';
 import Test from './pages/Test'
 import Upload from './pages/Upload';
+import TransactionTable from './pages/TransactionTable';
 
 import './css/App.css';
 
@@ -32,9 +33,14 @@ class App extends Component {
               </Route>
               <Route path="/test">
                 <Test />
+              </Route>
               <Route path="/upload">
                 <Menu />
                 <Upload />
+              </Route>
+              <Route path="/trans-table">
+                <Menu />
+                <TransactionTable />
               </Route>
               <Route>
                 <Notfound />
