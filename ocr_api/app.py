@@ -161,16 +161,6 @@ def saveToDb(transactions_list):
     for transaction in transactions_list:
         db.collection("transactions").document(str(uuid.uuid4())).set(transaction)
 
-
-
-
-
-# convert OCR text to table using Gemini
-# TODO 1: for each transaction, change transDate from string to datetime
-# TODO 2: for each transaction, generate category using Gemini
-# save into db pending user edits and confirmation
-# when save and fetch data, got userid
-
 @app.route("/transactions", methods=['GET'])
 def getTransactionsForUser():
     # Get userId from request args
