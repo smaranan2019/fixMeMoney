@@ -42,7 +42,8 @@ class BankStatementProcessor:
                 'amount': amount,
                 'type': type_str,
                 'userId': userId,
-                'category': category
+                'category': category,
+                'userConfirm': False # As user has not confirmed the transactions
             }
             # Add the dictionary to the list
             transactions.append(transaction)
