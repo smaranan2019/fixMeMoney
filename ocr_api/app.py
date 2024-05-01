@@ -66,7 +66,7 @@ def convertPdfToData():
             for ocr in ocr_response['ParsedResults']:
                 result = ocr['ParsedText'] # str
                 result += "\n\n-next page-\n\n"
-                # For each image (page), convert OCR text to table data using Gemini
+                # For each image (page), convert OCR text to table data and generate categories using Gemini
                 gemini_response = model.generate_content(gemini_prompt + "\n\n" + result)
                 gemini_response_text += gemini_response.text + "\n\n-next page-\n\n"
 
@@ -75,17 +75,11 @@ def convertPdfToData():
         # Get userId
         userId = User.getUserId()
 
-        # Generate category using Gemini for transactions
-        # gemini_prompt_for_categories = "Given "
-        # transactions_withcategories = model.generate_content(gemini_prompt_for_categories + "\n\n" + result).text
-
         # Convert Gemini table text to list of transactions for user
         transactions_list = bankStatementProcessor.convertGeminiTableToList(gemini_response_text, userId)
         
-        
-        
         # Save transactions to database for user
-        # db.saveToDb(transactions_list)
+        db.saveToDb(transactions_list)
         
         return transactions_list, 200
 
