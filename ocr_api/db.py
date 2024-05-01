@@ -15,11 +15,11 @@ class Database:
         for transaction in transactions_list:
             self.db.collection("transactions").document(str(uuid.uuid4())).set(transaction)
 
-    def queryTransactionsForUser(self, userId):
+    def queryTransactionsForUserToConfirm(self, userId):
         # Create a reference to the transactions collection
         transactions_ref = self.db.collection("transactions")
-        # Create a query against the collection
-        user_transactions_ref = transactions_ref.where(filter=FieldFilter("userId", "==", userId)).stream()
+        # Create a query against the 'transactions' collection for user which have not been confirmed
+        user_transactions_ref = transactions_ref.where(filter=FieldFilter("userId", "==", userId)).where(filter=FieldFilter("userConfirm", "==", False)).stream()
         transactions = []
         for transaction in user_transactions_ref:
             if transaction.exists:

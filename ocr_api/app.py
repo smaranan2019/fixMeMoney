@@ -93,7 +93,7 @@ def getTransactionsForUser():
         # Return an error response if userId is None / empty / non-numeric
         return "UserId is missing / not a number", 400
     # Create a query against the collection
-    transactions = db.queryTransactionsForUser(int(userId))
+    transactions = db.queryTransactionsForUserToConfirm(int(userId))
     return transactions, 200
 
 if __name__ == '__main__':
