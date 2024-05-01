@@ -2,12 +2,14 @@
 > Gemini Hackathon Submission
 
 # TODO:
-- send image to gemini it returns 
+- Send text to gemini, it returns 
     - categories
-    - amount  
-- store info in firebase 
-- UI to retreive the info
-    - dashboard 
+    - change transDate from string to datetime
+- UI to show editable transaction data 
+    - User can confirm suggested category
+    - Update db
+- UI to retreive the transaction data
+    - Dashboard
 
 # Categories: 
 > may change depending on the returns of Gemini
