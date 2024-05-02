@@ -7,15 +7,8 @@ class Footer extends Component {
         <hr />
         <div className="text-center">
           <p className="text-small">
-            &copy; 2020{' '}
-            <a
-              href="https://www.morion4000.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              morion4000
-            </a>
-            . All rights reserved.
+            &copy; 2024{' '}
+            fixmemoney
           </p>
           <p className="text-small">
             Your data is saved only in the browser. If you switch browsers or
