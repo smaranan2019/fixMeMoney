@@ -40,8 +40,20 @@ function TransactionTable() {
 	// Defining a state named rows
 	// which we can update by calling on setRows function
 	const [rows, setRows] = useState([
-		{id: 1, postDate: "13MAR", transDate: "15MAR", transDesc: "GRAB SLAYY SISTER", amount: 100.00, type: "DEBIT", category: "Transportation"},
+		{id: 1, transDate: "15MAR", desc: "GRAB SLAYY SISTER", amount: 100.00, type: "DEBIT", category: "Transportation", userId: 1},  
 	]);
+
+    useEffect(() => {
+        const fetchPost = async () => {
+           const response = await fetch(
+              'http://127.0.0.1:5200/transactions?userId=1'
+           );
+           const data = await response.json();
+           console.log(data);
+           setRows(data);
+        };
+        fetchPost();
+     }, []);
 
     const [categories, setCategories] = useState(["Food", "Transportation", "Apparel", "Rent", "Income"]);
 
@@ -64,8 +76,8 @@ function TransactionTable() {
 		setRows([
 			...rows,
 			{
-				id: rows.length + 1, postDate: "", transDate: "", 
-                transDesc: "", amount: 0, type: "", 
+				id: rows.length + 1, userId: "1", transDate: "", 
+                desc: "", amount: 0, type: "", 
                 category: ""
 			},
 		]);
@@ -96,6 +108,7 @@ function TransactionTable() {
 		const { name, value } = e.target;
 		const list = [...rows];
 		list[index][name] = value;
+        list[index]["UserConfirmation"] = true; //Indicate change in row
 		setRows(list);
 	};
 
@@ -180,10 +193,9 @@ function TransactionTable() {
 				>
 					<TableHead>
 						<TableRow>
-							<TableCell>Post Date</TableCell>
                             <TableCell>Trans Date</TableCell>
 							<TableCell>Transaction Description</TableCell>
-                            <TableCell>Amount Description</TableCell>
+                            <TableCell>Amount</TableCell>
                             <TableCell>Type</TableCell>
                             <TableCell>Category</TableCell>
 						</TableRow>
@@ -195,14 +207,6 @@ function TransactionTable() {
                                     <TableRow>
 										{isEdit ? (
                                             <div>
-												<TableCell padding="none">
-													<input
-														value={row.postDate}
-														name="postDate"
-														onChange={(e) => 
-														handleInputChange(e, i)}
-													/>
-												</TableCell>
                                                 <TableCell padding="none">
 													<input
 														value={row.transDate}
@@ -213,8 +217,8 @@ function TransactionTable() {
 												</TableCell>
                                                 <TableCell padding="none">
 													<input
-														value={row.transDesc}
-														name="transDesc"
+														value={row.desc}
+														name="desc"
 														onChange={(e) => 
 														handleInputChange(e, i)} //Add different input change to fetch gemini
 													/>
@@ -252,13 +256,10 @@ function TransactionTable() {
 										) : (
 											<div>
 												<TableCell component="th" scope="row">
-													{row.postDate}
-												</TableCell>
-												<TableCell component="th" scope="row">
 													{row.transDate}
 												</TableCell>
 												<TableCell component="th" scope="row">
-													{row.transDesc}
+													{row.desc}
 												</TableCell>
 												<TableCell component="th" scope="row">
 													{row.amount}
