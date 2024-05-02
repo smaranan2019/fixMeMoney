@@ -1,6 +1,7 @@
 //TransactionTable.js
 
 import React, { useState } from "react";
+import { useRef, useEffect } from 'react';
 import CreateIcon from "@material-ui/icons/Create";
 import {
 	Box, Button, Snackbar, Table,
@@ -131,7 +132,6 @@ function TransactionTable() {
 	const handleNo = () => {
 		setShowConfirm(false);
 	};
-
 	return (
 		<TableBody>
 			<Snackbar
@@ -146,185 +146,105 @@ function TransactionTable() {
 			</Snackbar>
 			<Box margin={1}>
 				<div style={{ display: "flex", justifyContent: "space-between" }}>
-					<div>
-						{isEdit ? (
-							<div>
-								<Button onClick={handleAdd}>
-									<AddBoxIcon onClick={handleAdd} />
-									ADD
+					{isEdit ? (
+						<>
+							<Button onClick={handleAdd}>
+								<AddBoxIcon />
+								ADD
+							</Button>
+							{rows.length > 0 && (
+								<Button disabled={disable} align="right" onClick={handleSave}>
+									<DoneIcon />
+									{disable ? 'SAVE' : 'SAVE'}
 								</Button>
-								{rows.length !== 0 && (
-									<div>
-										{disable ? (
-											<Button disabled align="right"
-															onClick={handleSave}>
-												<DoneIcon />
-												SAVE
-											</Button>
-										) : (
-											<Button align="right" onClick={handleSave}>
-												<DoneIcon />
-												SAVE
-											</Button>
-										)}
-									</div>
-								)}
-							</div>
-						) : (
-							<div>
-								<Button onClick={handleAdd}>
-									<AddBoxIcon onClick={handleAdd} />
-									ADD
-								</Button>
-								<Button align="right" onClick={handleEdit}>
-									<CreateIcon />
-									EDIT
-								</Button>
-							</div>
-						)}
-					</div>
+							)}
+						</>
+					) : (
+						<>
+							<Button onClick={handleAdd}>
+								<AddBoxIcon />
+								ADD
+							</Button>
+							<Button align="right" onClick={handleEdit}>
+								<CreateIcon />
+								EDIT
+							</Button>
+						</>
+					)}
 				</div>
 				<TableRow align="center"></TableRow>
-
-				<Table
-					className={classes.table}
-					size="small"
-					aria-label="a dense table"
-				>
+				<Table className={classes.table} size="small" aria-label="a dense table">
 					<TableHead>
 						<TableRow>
-                            <TableCell>Trans Date</TableCell>
+							<TableCell>Trans Date</TableCell>
 							<TableCell>Transaction Description</TableCell>
-                            <TableCell>Amount</TableCell>
-                            <TableCell>Type</TableCell>
-                            <TableCell>Category</TableCell>
+							<TableCell>Amount</TableCell>
+							<TableCell>Type</TableCell>
+							<TableCell>Category</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{rows.map((row, i) => {
-							return (
-								<div>
-                                    <TableRow>
-										{isEdit ? (
-                                            <div>
-                                                <TableCell padding="none">
-													<input
-														value={row.transDate}
-														name="transDate"
-														onChange={(e) => 
-														handleInputChange(e, i)}
-													/>
-												</TableCell>
-                                                <TableCell padding="none">
-													<input
-														value={row.desc}
-														name="desc"
-														onChange={(e) => 
-														handleInputChange(e, i)} //Add different input change to fetch gemini
-													/>
-												</TableCell>
-                                                <TableCell padding="none">
-													<input
-														value={row.amount}
-														name="amount"
-														onChange={(e) => 
-														handleInputChange(e, i)} //Add different input change to fetch gemini
-													/>
-												</TableCell>
-                                                <TableCell padding="none">
-													<input
-														value={row.type}
-														name="type"
-														onChange={(e) => 
-														handleInputChange(e, i)}
-													/>
-												</TableCell>
-												<TableCell padding="none">
-													<select
-														style={{ width: "100px" }}
-														name="category"
-														value={row.category}
-														onChange={(e) => 
-														handleInputChange(e, i)}
-													> 
-                                                    {categories.map((cat, i) => {
-                                                        return <option value={cat}>{cat}</option>
-                                                    })}
-													</select>
-												</TableCell>
-                                            </div>
-										) : (
-											<div>
-												<TableCell component="th" scope="row">
-													{row.transDate}
-												</TableCell>
-												<TableCell component="th" scope="row">
-													{row.desc}
-												</TableCell>
-												<TableCell component="th" scope="row">
-													{row.amount}
-												</TableCell>
-                                                <TableCell component="th" scope="row">
-													{row.type}
-												</TableCell>
-												<TableCell component="th" scope="row">
-													{row.category}
-												</TableCell>
-                                            </div>
-										)}
-										{isEdit ? (
-											<Button className="mr10"
-													onClick={handleConfirm}>
-												<ClearIcon />
-											</Button>
-										) : (
-											<Button className="mr10"
-													onClick={handleConfirm}>
-												<DeleteOutlineIcon />
-											</Button>
-										)}
-										{showConfirm && (
-											<div>
-												<Dialog
-													open={showConfirm}
-													onClose={handleNo}
-													aria-labelledby="alert-dialog-title"
-													aria-describedby=
-														"alert-dialog-description"
-												>
-													<DialogTitle id="alert-dialog-title">
-														{"Confirm Delete"}
-													</DialogTitle>
-													<DialogContent>
-														<DialogContentText 
-															id="alert-dialog-description">
-															Are you sure to delete
-														</DialogContentText>
-													</DialogContent>
-													<DialogActions>
-														<Button
-															onClick={() => 
-															handleRemoveClick(i)}
-															color="primary"
-															autoFocus
-														>
-															Yes
-														</Button>
-														<Button
-															onClick={handleNo}
-															color="primary"
-															autoFocus
-														>
-															No
-														</Button>
-													</DialogActions>
-												</Dialog>
-											</div>
-										)}
-                                    </TableRow>
-								</div>
-							);
-						})}
+						{rows.map((row, i) => (
+							<TableRow key={i}>
+								{isEdit ? (
+									<>
+										<TableCell padding="none">
+											<input
+												value={row.transDate}
+												name="transDate"
+												onChange={e => handleInputChange(e, i)}
+											/>
+										</TableCell>
+										<TableCell padding="none">
+											<input
+												value={row.desc}
+												name="desc"
+												onChange={e => handleInputChange(e, i)}
+											/>
+										</TableCell>
+										<TableCell padding="none">
+											<input
+												value={row.amount}
+												name="amount"
+												onChange={e => handleInputChange(e, i)}
+											/>
+										</TableCell>
+										<TableCell padding="none">
+											<input
+												value={row.type}
+												name="type"
+												onChange={e => handleInputChange(e, i)}
+											/>
+										</TableCell>
+										<TableCell padding="none">
+											<select
+												style={{ width: "100%" }}
+												name="category"
+												value={row.category}
+												onChange={e => handleInputChange(e, i)}
+											>
+												{categories.map((cat, index) => (
+													<option key={index} value={cat}>
+														{cat}
+													</option>
+												))}
+											</select>
+										</TableCell>
+									</>
+								) : (
+									<>
+										<TableCell>{row.transDate}</TableCell>
+										<TableCell>{row.desc}</TableCell>
+										<TableCell>{row.amount}</TableCell>
+										<TableCell>{row.type}</TableCell>
+										<TableCell>{row.category}</TableCell>
+									</>
+								)}
+								<Button className="mr10" onClick={handleConfirm}>
+									{isEdit ? <ClearIcon /> : <DeleteOutlineIcon />}
+								</Button>
+							</TableRow>
+						))}
 					</TableBody>
 				</Table>
 			</Box>
