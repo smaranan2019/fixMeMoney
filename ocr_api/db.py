@@ -1,5 +1,5 @@
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import firestore
 import uuid
 from google.cloud.firestore_v1.base_query import FieldFilter
 
@@ -27,3 +27,21 @@ class Database:
                 transaction_data['id'] = transaction.id  # Include the document ID in the data
                 transactions.append(transaction_data)
         return transactions
+    
+    def confirmTransactionsForUser(self, confirmed_transactions, isChange):
+        # Create a reference to the transactions collection
+        transactions_ref = self.db.collection("transactions")
+        if isChange:
+            for transaction in confirmed_transactions:
+                transaction_ref = transactions_ref.document(transaction.get("id"))
+                if transaction_ref.get().exists:
+                    transaction_ref.update(transaction)
+                else:
+                    print(f"No such transaction with id: '{transaction.get('id')}'")
+        else:
+            for transaction in confirmed_transactions:
+                transaction_ref = transactions_ref.document(transaction.get("id"))
+                if transaction_ref.get().exists:
+                    transaction_ref.update({"userConfirm": True})
+                else:
+                    print(f"No such transaction with id: '{transaction.get('id')}'")

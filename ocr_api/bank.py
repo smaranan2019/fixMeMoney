@@ -1,6 +1,7 @@
 import os
 import google.generativeai as genai
 from datetime import datetime
+from typing import Union
 
 class BankStatementProcessor:
     
@@ -78,4 +79,24 @@ class BankStatementProcessor:
         date_format = "%d %b %Y"
         trans_date = datetime.strptime(full_date_str, date_format)
         return trans_date
-
+    
+    def isValidTransaction(self, transaction):
+        # Check if all required keys exist in the transaction
+        required_keys = {
+            "amount": Union[int, float],
+            "category": str,
+            "desc": str,
+            "id": str,
+            "transDate": str,
+            "type": str,
+            "userConfirm": bool,
+            "userId": int
+        }
+        # Ensure transaction is a dictionary
+        if not isinstance(transaction, dict):
+            return False
+        # Check if all keys are present and of the correct type
+        for key, expected_type in required_keys.items():
+            if key not in transaction or not isinstance(transaction[key], expected_type):
+                return False
+        return True
