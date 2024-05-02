@@ -1,10 +1,10 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 import requests
 import google.generativeai as genai
-from constants import gemini_prompt, ocr_url
+from constants import gemini_prompt, ocr_url, allowed_file
 from db import Database
 from user import User
 from bank import BankStatementProcessor
@@ -30,22 +30,13 @@ pdf_api_key=os.getenv("PDF_API_KEY")
 pdf_2_jpg_url = 'https://v2.convertapi.com/convert/pdf/to/jpg?Secret=' + pdf_api_key + '&StoreFile=true'
 
 
-ALLOWED_EXTENSIONS = {'pdf'}
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 @app.route("/submitPdf", methods=['POST'])
 def convertPdfToData():
     if 'file' not in request.files:
-        return "No file provided", 400
-
+        return jsonify({"error": "No file provided"}), 400
     file = request.files['file']
-
     if file.filename == '':
-        return "No file provided", 400
-
+        return jsonify({"error": "No file provided"}), 400
     if file and allowed_file(file.filename): # Allow only pdf
         # Start of converting PDF to JPG
         files={'file':(file.filename, file.stream, file.content_type, file.headers)}
@@ -66,30 +57,18 @@ def convertPdfToData():
             for ocr in ocr_response['ParsedResults']:
                 result = ocr['ParsedText'] # str
                 result += "\n\n-next page-\n\n"
-                # For each image (page), convert OCR text to table data using Gemini
+                # For each image (page), convert OCR text to table data and generate categories using Gemini
                 gemini_response = model.generate_content(gemini_prompt + "\n\n" + result)
                 gemini_response_text += gemini_response.text + "\n\n-next page-\n\n"
-
         print("\nGemini table data:\n", gemini_response_text)
-        
         # Get userId
         userId = User.getUserId()
-
-        # Generate category using Gemini for transactions
-        # gemini_prompt_for_categories = "Given "
-        # transactions_withcategories = model.generate_content(gemini_prompt_for_categories + "\n\n" + result).text
-
         # Convert Gemini table text to list of transactions for user
         transactions_list = bankStatementProcessor.convertGeminiTableToList(gemini_response_text, userId)
-        
-        
-        
         # Save transactions to database for user
-        # db.saveToDb(transactions_list)
-        
-        return transactions_list, 200
-
-    return "Wrong file format", 415
+        db.saveToDb(transactions_list)
+        return jsonify(transactions_list), 200
+    return jsonify({"error": "Wrong file format"}), 415
 
 @app.route("/transactions", methods=['GET'])
 def getTransactionsForUser():
@@ -97,10 +76,28 @@ def getTransactionsForUser():
     userId = request.args.get('userId')
     if not userId or not userId.isnumeric():
         # Return an error response if userId is None / empty / non-numeric
-        return "UserId is missing / not a number", 400
+        return jsonify({"error": "UserId is missing / not a number"}), 400
     # Create a query against the collection
-    transactions = db.queryTransactionsForUser(int(userId))
-    return transactions, 200
+    transactions = db.queryTransactionsForUserToConfirm(int(userId))
+    return jsonify(transactions), 200
+
+@app.route("/transactionsConfirm", methods=['POST'])
+def confirmTransactionsForUser():
+    # Get transactions from body of request
+    transactions = request.get_json(silent=True)
+    if not transactions:
+        return jsonify({"error": "No transactions provided"}), 400
+    # Check on transactions
+    for transaction in transactions:
+        if not bankStatementProcessor.isValidTransaction(transaction):
+            return jsonify({"error": "Invalid transactions provided"}), 415
+    # Filter transactions where 'userConfirm' = True
+    confirmed_transactions = [transaction for transaction in transactions if transaction.get('userConfirm', False)]
+    if confirmed_transactions:
+        db.confirmTransactionsForUser(confirmed_transactions, True)
+    # Update all transactions to userConfirm=True
+    db.confirmTransactionsForUser(transactions, False)
+    return jsonify({"message": "Transactions saved successfully"}), 200
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=port, debug=True)

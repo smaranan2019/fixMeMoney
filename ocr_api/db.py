@@ -1,5 +1,5 @@
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import firestore
 import uuid
 from google.cloud.firestore_v1.base_query import FieldFilter
 
@@ -15,11 +15,11 @@ class Database:
         for transaction in transactions_list:
             self.db.collection("transactions").document(str(uuid.uuid4())).set(transaction)
 
-    def queryTransactionsForUser(self, userId):
+    def queryTransactionsForUserToConfirm(self, userId):
         # Create a reference to the transactions collection
         transactions_ref = self.db.collection("transactions")
-        # Create a query against the collection
-        user_transactions_ref = transactions_ref.where(filter=FieldFilter("userId", "==", userId)).stream()
+        # Create a query against the 'transactions' collection for user which have not been confirmed
+        user_transactions_ref = transactions_ref.where(filter=FieldFilter("userId", "==", userId)).where(filter=FieldFilter("userConfirm", "==", False)).stream()
         transactions = []
         for transaction in user_transactions_ref:
             if transaction.exists:
@@ -27,3 +27,21 @@ class Database:
                 transaction_data['id'] = transaction.id  # Include the document ID in the data
                 transactions.append(transaction_data)
         return transactions
+    
+    def confirmTransactionsForUser(self, confirmed_transactions, isChange):
+        # Create a reference to the transactions collection
+        transactions_ref = self.db.collection("transactions")
+        if isChange:
+            for transaction in confirmed_transactions:
+                transaction_ref = transactions_ref.document(transaction.get("id"))
+                if transaction_ref.get().exists:
+                    transaction_ref.update(transaction)
+                else:
+                    print(f"No such transaction with id: '{transaction.get('id')}'")
+        else:
+            for transaction in confirmed_transactions:
+                transaction_ref = transactions_ref.document(transaction.get("id"))
+                if transaction_ref.get().exists:
+                    transaction_ref.update({"userConfirm": True})
+                else:
+                    print(f"No such transaction with id: '{transaction.get('id')}'")
