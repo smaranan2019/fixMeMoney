@@ -46,7 +46,7 @@ class Database:
                 else:
                     print(f"No such transaction with id: '{transaction.get('id')}'")
 
-    def unconfirmTransactionsForUser(self):
+    def unconfirmTransactionsForUserTest(self):
         transactions = []
         # Get all transactions
         transactions_all = self.db.collection("transactions").stream()
@@ -63,6 +63,23 @@ class Database:
                 transaction_ref.update({"userConfirm": False})
         return transactions
     
+    def confirmTransactionsForUserTest(self):
+        transactions = []
+        # Get all transactions
+        transactions_all = self.db.collection("transactions").stream()
+        for transaction in transactions_all:
+            if transaction.exists:
+                transaction_data = transaction.to_dict()
+                transaction_data['id'] = transaction.id  # Include the document ID in the data
+                transactions.append(transaction_data)
+        # Unconfirm all transactions
+        transactions_ref = self.db.collection("transactions")
+        for transaction in transactions:
+            transaction_ref = transactions_ref.document(transaction.get("id"))
+            if transaction_ref.get().exists:
+                transaction_ref.update({"userConfirm": True})
+        return transactions
+
     def queryTransactionsForDashboard(self):
          # Create a reference to the transactions collection
         transactions_ref = self.db.collection("transactions")
