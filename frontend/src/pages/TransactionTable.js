@@ -156,6 +156,30 @@ function TransactionTable() {
 	const handleNo = () => {
 		setShowConfirm(false);
 	};
+
+    const [postStatus, setPostStatus] = useState(null);
+
+    const onSubmit = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:5200/transactionsConfirm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(rows), // Send rows as the request body
+            });
+            const data = await response.json();
+            setPostStatus(data); // Update state with response status
+            console.log(postStatus);
+        } catch (error) {
+            console.error('Error while submitting:', error);
+        }
+    };
+
+    // Step 4: Update handleSubmit to call onSubmit
+    const handleSubmit = () => {
+        onSubmit(); // Call onSubmit function to send POST request
+    };
 	
 	return (
 		<TableBody>
@@ -199,6 +223,10 @@ function TransactionTable() {
 							<Button align="right" onClick={handleEdit}>
 								<CreateIcon />
 								EDIT
+							</Button>
+                            <Button align="right" onClick={handleSubmit}>
+								<DoneIcon />
+								CONFIRM ALL TRANSACTIONS
 							</Button>
 						</>
 					)}
