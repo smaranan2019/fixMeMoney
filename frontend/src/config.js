@@ -16,110 +16,128 @@ const CONFIG = {
         id: 47433,
         type: 'asset',
         name: 'Bank deposit',
-        amount: 50000,
+        amount: 10000,
         apr: 4,
         compounds: true,
-      },
-      {
-        id: 74674,
-        type: 'asset',
-        name: 'Cash',
-        amount: 5000,
-        apr: 0,
-        compounds: false,
-      },
-      {
-        id: 21623,
-        type: 'asset',
-        name: 'Crypto Staking',
-        amount: 30000,
-        apr: 8,
-        compounds: true,
-      },
+      }
     ],
     LIABILITIES: [
       {
         id: 23453,
         type: 'liability',
-        name: 'Mortgage',
-        amount: 50000,
+        name: 'Student Loan',
+        amount: 44000,
         apr: 4,
-      },
-      {
-        id: 48937,
-        type: 'liability',
-        name: 'Credit card',
-        amount: 5000,
-        apr: 12,
-      },
+      }
     ],
     INCOME: [
       {
-        id: 39493,
-        type: 'income',
-        name: 'Job',
-        amount: 2500,
-        apr: 0,
-        compounds: false,
+        "id": 23780,
+        "type": "income",
+        "name": "salary",
+        "amount": 5000,
+        "compounds": false
       },
       {
-        id: 19883,
-        type: 'income',
-        name: 'Consulting',
-        amount: 500,
-        apr: 0,
-        compounds: false,
+        "id": 23789,
+        "type": "income",
+        "name": "ONE CARD ENHANCED REBATE",
+        "amount": 61.78,
+        "compounds": false
       },
       {
-        id: 64874,
-        type: 'income',
-        name: 'Maintenance contract',
-        amount: 200,
-        apr: 0,
-        compounds: false,
+        "id": 95123,
+        "type": "income",
+        "name": "ONE CARD ADDITIONAL REBATE",
+        "amount": 82.38,
+        "compounds": false
       },
+      {
+        "id": 48201,
+        "type": "income",
+        "name": "PAYMT THRU E-BANK/HOMEB/CYBERB (EP38)",
+        "amount": 4696.22,
+        "compounds": false
+      },
+      {
+        "id": 71934,
+        "type": "income",
+        "name": "PAYMT THRU E-BANWHOMEB/CYBERB (EP04)",
+        "amount": 146,
+        "compounds": false
+      },
+      {
+        "id": 10562,
+        "type": "income",
+        "name": "UOB ONE CASH REBATE BILL REDEMPTION",
+        "amount": 200,
+        "compounds": false
+      }
     ],
     EXPENSES: [
       {
-        id: 41234,
-        type: 'expense',
-        name: 'Food',
-        amount: 500,
-        apr: 0,
-        compounds: false,
+        "id": 98234,
+        "type": "expense",
+        "name": "NTIJC FairPrice App Payment",
+        "amount": 18.33,
+        "compounds": false
       },
       {
-        id: 35523,
-        type: 'expense',
-        name: 'Car',
-        amount: 100,
-        apr: 0,
-        compounds: false,
+        "id": 74523,
+        "type": "expense",
+        "name": "7-ELEVEN",
+        "amount": 4.03,
+        "compounds": false
       },
       {
-        id: 12212,
-        type: 'expense',
-        name: 'Rent',
-        amount: 400,
-        apr: 0,
-        compounds: false,
+        "id": 23457,
+        "type": "expense",
+        "name": "Grab",
+        "amount": 0.96,
+        "compounds": false
       },
       {
-        id: 63436,
-        type: 'expense',
-        name: 'Taxes',
-        amount: 300,
-        apr: 0,
-        compounds: false,
+        "id": 87321,
+        "type": "expense",
+        "name": "Grab",
+        "amount": 34.8,
+        "compounds": false
       },
       {
-        id: 3345,
-        type: 'expense',
-        name: 'Misc',
-        amount: 500,
-        apr: 0,
-        compounds: false,
+        "id": 12984,
+        "type": "expense",
+        "name": "Prime Supermarket",
+        "amount": 1.88,
+        "compounds": false
       },
+      {
+        "id": 62357,
+        "type": "expense",
+        "name": "NTIJC FairPrice App Payment",
+        "amount": 20.74,
+        "compounds": false
+      },
+      {
+        "id": 58723,
+        "type": "expense",
+        "name": "NTIJC FairPrice App Payment",
+        "amount": 14.9,
+        "compounds": false
+      },
+      {
+        "id": 95142,
+        "type": "expense",
+        "name": "Grab",
+        "amount": 2.9,
+        "compounds": false
+      },
+      {
+        "id": 71234,
+        "type": "expense",
+        "name": "Subscription (GIGA)",
+        "amount": 200,
+        "compounds": false
+      }
     ],
   },
 };

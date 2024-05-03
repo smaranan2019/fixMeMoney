@@ -99,64 +99,6 @@ class Header extends Component {
             <div className="col-5">
               <h1 className="display-4">Money Streams</h1>
               <p className="lead">Keep track of income vs expenses and view diagrams &amp; charts to help you get a grasp on your financial situation.</p>
-              <button
-                type="button"
-                className={`btn btn-lg btn-block ${
-                  this.state.accrued_sum >= 0 ? 'btn-primary' : 'btn-danger'
-                }`}
-                data-tip
-                data-for="streaming_total"
-              >
-                Streaming&nbsp;&nbsp;
-                <h5 style={{ color: 'rgb(177, 190, 212)' }}>
-                  <NumberFormat
-                    value={this.state.accrued_sum}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={'$'}
-                    decimalScale={6}
-                  />
-                </h5>
-                <ReactTooltip id="streaming_total" effect="solid">
-                  Hourly:{' '}
-                  <NumberFormat
-                    value={this.state.monthly_total / 30 / 24}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={'$'}
-                    decimalScale={2}
-                  />
-                  <br />
-                  Daily:{' '}
-                  <NumberFormat
-                    value={this.state.monthly_total / 30}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={'$'}
-                    decimalScale={1}
-                  />
-                  <br />
-                  <strong>
-                    Monthly:{' '}
-                    <NumberFormat
-                      value={this.state.monthly_total}
-                      displayType={'text'}
-                      thousandSeparator={true}
-                      prefix={'$'}
-                      decimalScale={0}
-                    />
-                  </strong>
-                  <br />
-                  Yearly:{' '}
-                  <NumberFormat
-                    value={this.state.monthly_total * 12}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={'$'}
-                    decimalScale={0}
-                  />
-                </ReactTooltip>
-              </button>
               <br />
               <br />
               <h5>
@@ -252,15 +194,16 @@ class Header extends Component {
           </div>
           <div className="row">
             <div className="col">
-              <center>
+              <br></br>
+              <left>
                 <button
                   className="btn btn-sm btn-secondary"
                   onClick={this.props.sampleHandler}
                   data-tip="Temporarily load sample data. Refresh page to reset."
                 >
-                  Load sample data
+                  Generate from bank statement
                 </button>
-              </center>
+              </left>
             </div>
           </div>
         </div>

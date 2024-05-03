@@ -1,0 +1,128 @@
+[
+    {
+        "amount": 18.33,
+        "category": "food",
+        "desc": "NTIJC FairPrice App PaymenSlNGAPORE",
+        "transDate": "Sat, 10 Feb 2024 00:00:00 GMT",
+        "type": "debit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 4.03,
+        "category": "food",
+        "desc": "7-ELEVEN-CHANGI CITY PT SINGAPORE",
+        "transDate": "Sat, 10 Feb 2024 00:00:00 GMT",
+        "type": "debit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 0.96,
+        "category": "transport",
+        "desc": "Grab* A-6XDGF7DGWJ3X Singapore",
+        "transDate": "Sun, 11 Feb 2024 00:00:00 GMT",
+        "type": "debit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 34.8,
+        "category": "transport",
+        "desc": "Grab* A-6XDGSUEGWJ3X Singapore",
+        "transDate": "Sun, 11 Feb 2024 00:00:00 GMT",
+        "type": "debit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 1.88,
+        "category": "food",
+        "desc": "PRIME SUPERMARKET Singapore",
+        "transDate": "Sun, 11 Feb 2024 00:00:00 GMT",
+        "type": "debit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 20.74,
+        "category": "food",
+        "desc": "NTIJC FairPrice App PaymenSlNGAPORE",
+        "transDate": "Tue, 12 Mar 2024 00:00:00 GMT",
+        "type": "debit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 61.78,
+        "category": "others",
+        "desc": "ONE CARD ENHANCED REBATE",
+        "transDate": "Tue, 12 Mar 2024 00:00:00 GMT",
+        "type": "credit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 82.38,
+        "category": "others",
+        "desc": "ONE CARD ADDITIONAL REBATE",
+        "transDate": "Tue, 12 Mar 2024 00:00:00 GMT",
+        "type": "credit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 14.9,
+        "category": "food",
+        "desc": "NTIJC FairPrice App PaymenSlNGAPORE",
+        "transDate": "Thu, 15 Feb 2024 00:00:00 GMT",
+        "type": "debit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 2.9,
+        "category": "transport",
+        "desc": "Grab* A-6XUFG4WWWFXF Singapore",
+        "transDate": "Fri, 16 Feb 2024 00:00:00 GMT",
+        "type": "debit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 4696.22,
+        "category": "others",
+        "desc": "PAYMT THRU E-BANK/HOMEB/CYBERB (EP38)",
+        "transDate": "Fri, 23 Feb 2024 00:00:00 GMT",
+        "type": "credit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 146,
+        "category": "others",
+        "desc": "PAYMT THRU E-BANWHOMEB/CYBERB (EP04)",
+        "transDate": "Mon, 11 Mar 2024 00:00:00 GMT",
+        "type": "credit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 200,
+        "category": "subscriptions",
+        "desc": "GIGA 68255000",
+        "transDate": "Fri, 09 Feb 2024 00:00:00 GMT",
+        "type": "credit",
+        "userConfirm": true,
+        "userId": 1
+    },
+    {
+        "amount": 200,
+        "category": "others",
+        "desc": "UOB ONE CASH REBATE BILL REDEMPTION",
+        "transDate": "Fri, 16 Feb 2024 00:00:00 GMT",
+        "type": "credit",
+        "userConfirm": true,
+        "userId": 1
+    }
+]
