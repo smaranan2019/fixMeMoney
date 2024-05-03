@@ -110,5 +110,11 @@ def confirmTransactionsForUser():
     db.confirmTransactionsForUser(transactions, False)
     return jsonify({"message": "Transactions saved successfully"}), 200
 
+@app.route("/transactionsUnconfirm", methods=['GET']) # For testing
+def unconfirmTransactionsForUser():
+    # Update all transactions to userConfirm=False (unconfirm)
+    db.unconfirmTransactionsForUser()
+    return jsonify({"message": "Transactions unconfirmed successfully"}), 200
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=port, debug=True)
