@@ -42,7 +42,7 @@ function TransactionTable() {
 	// Defining a state named rows
 	// which we can update by calling on setRows function
 	const [rows, setRows] = useState([
-		{id: 1, transDate: "15MAR", desc: "GRAB SLAYY SISTER", amount: 100.00, type: "DEBIT", category: "Transportation", userId: 1},  
+		{id: 1, transDate: "15MAR", desc: "GRAB SLAYY SISTER", amount: 100.00, type: "DEBIT", category: "Transportation", userId: 1, userConfirm: false},  
 	]);
 
     useEffect(() => {
@@ -129,11 +129,15 @@ function TransactionTable() {
 				// Handle invalid category case, e.g., set an error or revert to previous value
 				console.error("Invalid category selected");
 			}
-		} else {
+		} else if (name === "amount"){
+            updatedRows[index][name] = parseFloat(value);
+        }
+        
+        else {
 			// Handle other inputs generically
 			updatedRows[index][name] = value;
 		}
-		updatedRows[index]["UserConfirmation"] = true;
+		updatedRows[index]["userConfirm"] = true;
 		setRows(updatedRows);
 	};
 

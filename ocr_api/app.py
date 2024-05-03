@@ -103,7 +103,7 @@ def confirmTransactionsForUser():
         if not bankStatementProcessor.isValidTransaction(transaction):
             return jsonify({"error": "Invalid transactions provided"}), 415
     # Filter transactions where 'userConfirm' = True
-    confirmed_transactions = [transaction for transaction in transactions if transaction.get('userConfirm', False)]
+    confirmed_transactions = [transaction for transaction in transactions if transaction.get('userConfirm', True)]
     if confirmed_transactions:
         db.confirmTransactionsForUser(confirmed_transactions, True)
     # Update all transactions to userConfirm=True
