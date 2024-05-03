@@ -110,11 +110,17 @@ def confirmTransactionsForUser():
     db.confirmTransactionsForUser(transactions, False)
     return jsonify({"message": "Transactions saved successfully"}), 200
 
-@app.route("/transactionsUnconfirm", methods=['GET']) # For testing
-def unconfirmTransactionsForUser():
+@app.route("/transactionsUnconfirmTest", methods=['GET']) # For testing
+def unconfirmTransactionsForUserTest():
     # Update all transactions to userConfirm=False (unconfirm)
-    db.unconfirmTransactionsForUser()
+    db.unconfirmTransactionsForUserTest()
     return jsonify({"message": "Transactions unconfirmed successfully"}), 200
+
+@app.route("/transactionsConfirmTest", methods=['GET']) # For testing
+def confirmTransactionsForUserTest():
+    # Update all transactions to userConfirm=False (unconfirm)
+    db.confirmTransactionsForUserTest()
+    return jsonify({"message": "Transactions confirmed successfully"}), 200
 
 @app.route("/transactionsForDashboard", methods=['GET'])
 def getTransactionsForDashboard():
