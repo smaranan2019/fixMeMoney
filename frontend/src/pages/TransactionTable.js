@@ -11,6 +11,7 @@ import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import DoneIcon from "@material-ui/icons/Done";
 import ClearIcon from "@material-ui/icons/Clear";
+import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
 import Dialog from "@material-ui/core/Dialog";
@@ -56,7 +57,8 @@ function TransactionTable() {
         fetchPost();
      }, []);
 
-    const [categories, setCategories] = useState(["Food", "Transportation", "Apparel", "Rent", "Income"]);
+    // const [categories, setCategories] = useState(["Food", "Transportation", "Apparel", "Rent", "Income"]);
+	const [categories] = useState(["food", "travel", "apparel", "transport", "bills", "medical expenses", "subscriptions", "tax", "others"]);
 
 	// Initial states
 	const [open, setOpen] = React.useState(false);
@@ -101,16 +103,38 @@ function TransactionTable() {
 		setOpen(true);
 	};
 
+	const handleCancel = () => {
+		// TODO: Go back to originalRows
+		// setRows(originalRows); // You need to manage originalRows state when the edit starts
+		setEdit(false);
+		setDisable(false);
+		setOpen(false);
+		// Log cancel action
+		console.log("Edit cancelled");
+	};
+	
+
 	// The handleInputChange handler can be set up to handle
 	// many different inputs in the form, listen for changes 
 	// to input elements and record their values in state
 	const handleInputChange = (e, index) => {
 		setDisable(false);
 		const { name, value } = e.target;
-		const list = [...rows];
-		list[index][name] = value;
-        list[index]["UserConfirmation"] = true; //Indicate change in row
-		setRows(list);
+		const updatedRows = [...rows];
+		if (name === "category") {
+			// Handle category-specific logic
+			if (categories.includes(value)) {
+				updatedRows[index][name] = value;
+			} else {
+				// Handle invalid category case, e.g., set an error or revert to previous value
+				console.error("Invalid category selected");
+			}
+		} else {
+			// Handle other inputs generically
+			updatedRows[index][name] = value;
+		}
+		updatedRows[index]["UserConfirmation"] = true;
+		setRows(updatedRows);
 	};
 
 	// Showing delete confirmation to users
@@ -132,6 +156,7 @@ function TransactionTable() {
 	const handleNo = () => {
 		setShowConfirm(false);
 	};
+	
 	return (
 		<TableBody>
 			<Snackbar
@@ -153,10 +178,16 @@ function TransactionTable() {
 								ADD
 							</Button>
 							{rows.length > 0 && (
+								<>
 								<Button disabled={disable} align="right" onClick={handleSave}>
 									<DoneIcon />
 									{disable ? 'SAVE' : 'SAVE'}
 								</Button>
+								<Button align="right" onClick={handleCancel}>
+									<CancelIcon />
+									CANCEL
+								</Button>
+								</>
 							)}
 						</>
 					) : (

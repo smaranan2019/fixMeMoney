@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 import requests
 import google.generativeai as genai
-from constants import gemini_prompt, ocr_url, allowed_file
+from constants import gemini_prompt, ocr_url, allowed_file, result_page_1
 from db import Database
 from user import User
 from bank import BankStatementProcessor
@@ -25,6 +25,9 @@ CORS(app)
 port = 5200
 
 ocr_api_key=os.getenv("OCR_API_KEY")
+headerInfo = {
+    'apikey': ocr_api_key
+}
 
 pdf_api_key=os.getenv("PDF_API_KEY")
 pdf_2_jpg_url = 'https://v2.convertapi.com/convert/pdf/to/jpg?Secret=' + pdf_api_key + '&StoreFile=true'
@@ -39,20 +42,28 @@ def convertPdfToData():
         return jsonify({"error": "No file provided"}), 400
     if file and allowed_file(file.filename): # Allow only pdf
         # Start of converting PDF to JPG
+        print("\nStart of converting PDF to JPG using OCR")
         files={'file':(file.filename, file.stream, file.content_type, file.headers)}
         jpg_response = requests.post(pdf_2_jpg_url, files=files)
         jpg_data = jpg_response.json()
+        print("\nOCR jpg response:\n", jpg_data)
         # End of converting PDF to JPG
         result = ""
         gemini_response_text = ""
+        print("\nEnd of converting JPG to text using OCR")
         # Start of converting JPG to text
+        print("\nStart of converting JPG to text using OCR")
         for jpg in jpg_data['Files']:
             body = {
                 "url" : jpg["Url"],
                 "apikey": ocr_api_key
             }
-            ocr_text = requests.post(ocr_url, data=body)
+            ocr_text = requests.post(ocr_url, data=body, headers=headerInfo)
             ocr_response = ocr_text.json()
+            # Check if OCR API is down
+            if ocr_response['IsErroredOnProcessing']:
+                url = jpg["Url"]
+                return jsonify({"error": f"OCR API to convert JPG to text failed for {url}"}), 404
             # End of converting JPG to text
             for ocr in ocr_response['ParsedResults']:
                 result = ocr['ParsedText'] # str
@@ -60,7 +71,7 @@ def convertPdfToData():
                 # For each image (page), convert OCR text to table data and generate categories using Gemini
                 gemini_response = model.generate_content(gemini_prompt + "\n\n" + result)
                 gemini_response_text += gemini_response.text + "\n\n-next page-\n\n"
-        print("\nGemini table data:\n", gemini_response_text)
+        print("\nGemini table data with categories:\n", gemini_response_text)
         # Get userId
         userId = User.getUserId()
         # Convert Gemini table text to list of transactions for user
