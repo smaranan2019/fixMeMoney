@@ -62,3 +62,17 @@ class Database:
             if transaction_ref.get().exists:
                 transaction_ref.update({"userConfirm": False})
         return transactions
+    
+    def queryTransactionsForDashboard(self):
+         # Create a reference to the transactions collection
+        transactions_ref = self.db.collection("transactions")
+        # Create a query against the 'transactions' collection for user which have not been confirmed
+        # Assumption: only 1 user (userId=1)
+        user_transactions_ref = transactions_ref.where(filter=FieldFilter("userId", "==", 1)).where(filter=FieldFilter("userConfirm", "==", True)).stream()
+        transactions = []
+        for transaction in user_transactions_ref:
+            if transaction.exists:
+                transaction_data = transaction.to_dict()
+                transaction_data['id'] = transaction.id  # Include the document ID in the data
+                transactions.append(transaction_data)
+        return transactions
